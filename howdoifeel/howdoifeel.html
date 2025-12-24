@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>올해 당신의 마음은?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* 강원교육모두 Light 폰트 적용 */
+        @font-face {
+            font-family: 'GangwonEduAllLight';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEduAllLight.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'GangwonEduAllLight', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #4a5568;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        .input-group {
+            transition: all 0.3s ease;
+        }
+
+        .input-group:focus-within {
+            transform: translateY(-2px);
+        }
+
+        .loading-heart {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+            transform: rotate(45deg);
+            transform-origin: 40px 40px;
+        }
+        .loading-heart div {
+            top: 32px;
+            left: 32px;
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background: #e53e3e;
+            animation: loading-heart 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+        .loading-heart div:after,
+        .loading-heart div:before {
+            content: " ";
+            position: absolute;
+            display: block;
+            width: 32px;
+            height: 32px;
+            background: #e53e3e;
+        }
+        .loading-heart div:before {
+            left: -24px;
+            border-radius: 50% 0 0 50%;
+        }
+        .loading-heart div:after {
+            top: -24px;
+            border-radius: 50% 50% 0 0;
+        }
+        @keyframes loading-heart {
+            0% {
+                transform: scale(0.95);
+            }
+            5% {
+                transform: scale(1.1);
+            }
+            39% {
+                transform: scale(0.85);
+            }
+            45% {
+                transform: scale(1);
+            }
+            60% {
+                transform: scale(0.95);
+            }
+            100% {
+                transform: scale(0.9);
+            }
+        }
+
+        /* 결과 화면 애니메이션 */
+        .fade-in-up {
+            animation: fadeInUp 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4">
+
+    <div class="w-full max-w-2xl">
+        <!-- 메인 컨테이너 -->
+        <div class="glass-panel p-8 md:p-12 relative overflow-hidden">
+            
+            <!-- 장식용 배경 원 -->
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+
+            <!-- 헤더 섹션 -->
+            <header class="text-center mb-10 relative z-10">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3 tracking-wide">
+                    <i class="fas fa-compact-disc text-indigo-500 mr-2"></i>올해 당신의 마음은?
+                </h1>
+                <p class="text-gray-600 text-lg">
+                    당신의 플레이리스트 3곡을 알려주세요.<br>
+                    음악 속에 담긴 당신의 1년을 읽어드립니다.
+                </p>
+            </header>
+
+            <!-- 입력 폼 -->
+            <div id="inputSection" class="relative z-10 space-y-6">
+                <!-- Song 1 -->
+                <div class="input-group bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-6 h-6 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-full text-sm font-bold">1</span>
+                        <label class="text-gray-700 font-medium">첫 번째 노래</label>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="text" id="artist1" placeholder="가수 (예: 최유리)" class="w-full bg-gray-50 border-b-2 border-transparent focus:border-indigo-400 outline-none px-2 py-1 transition-colors">
+                        <input type="text" id="title1" placeholder="노래 제목 (예: 숲)" class="w-full bg-gray-50 border-b-2 border-transparent focus:border-indigo-400 outline-none px-2 py-1 transition-colors">
+                    </div>
+                </div>
+
+                <!-- Song 2 -->
+                <div class="input-group bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-6 h-6 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-full text-sm font-bold">2</span>
+                        <label class="text-gray-700 font-medium">두 번째 노래</label>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="text" id="artist2" placeholder="가수" class="w-full bg-gray-50 border-b-2 border-transparent focus:border-indigo-400 outline-none px-2 py-1 transition-colors">
+                        <input type="text" id="title2" placeholder="노래 제목" class="w-full bg-gray-50 border-b-2 border-transparent focus:border-indigo-400 outline-none px-2 py-1 transition-colors">
+                    </div>
+                </div>
+
+                <!-- Song 3 -->
+                <div class="input-group bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-6 h-6 flex items-center justify-center bg-indigo-100 text-indigo-600 rounded-full text-sm font-bold">3</span>
+                        <label class="text-gray-700 font-medium">세 번째 노래</label>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="text" id="artist3" placeholder="가수" class="w-full bg-gray-50 border-b-2 border-transparent focus:border-indigo-400 outline-none px-2 py-1 transition-colors">
+                        <input type="text" id="title3" placeholder="노래 제목" class="w-full bg-gray-50 border-b-2 border-transparent focus:border-indigo-400 outline-none px-2 py-1 transition-colors">
+                    </div>
+                </div>
+
+                <button onclick="analyzeSongs()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg transform transition hover:-translate-y-1 hover:shadow-xl mt-6">
+                    <i class="fas fa-magic mr-2"></i> 나의 1년 읽어보기
+                </button>
+            </div>
+
+            <!-- 로딩 화면 (숨김) -->
+            <div id="loadingSection" class="hidden flex-col items-center justify-center py-12 relative z-10">
+                <div class="loading-heart"><div></div></div>
+                <p class="mt-8 text-xl text-gray-600 animate-pulse">노래의 가사를 음미하는 중...</p>
+                <p class="text-sm text-gray-400 mt-2">당신의 1년을 정리하고 있어요</p>
+            </div>
+
+            <!-- 결과 화면 (숨김) -->
+            <div id="resultSection" class="hidden relative z-10">
+                <!-- 컬러 카드 -->
+                <div id="colorCard" class="w-full h-32 rounded-t-2xl shadow-inner flex items-center justify-center mb-0 transition-colors duration-1000 fade-in-up">
+                    <div class="text-center text-white drop-shadow-md">
+                        <p class="text-sm opacity-90 mb-1">올해 당신의 퍼스널 컬러</p>
+                        <h2 id="resultColorName" class="text-2xl font-bold"></h2>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-b-2xl shadow-lg border-t-0 fade-in-up" style="animation-delay: 0.2s;">
+                    <!-- 키워드 -->
+                    <div id="resultKeywords" class="flex flex-wrap gap-2 justify-center mb-6">
+                        <!-- JS로 채워짐 -->
+                    </div>
+
+                    <!-- 제목 -->
+                    <h3 id="resultTitle" class="text-2xl font-bold text-center text-gray-800 mb-6 leading-relaxed"></h3>
+
+                    <!-- 내용 -->
+                    <div class="prose prose-lg mx-auto text-gray-600 leading-8 text-justify">
+                        <p id="resultContent" class="whitespace-pre-line"></p>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-gray-100 text-center">
+                        <button onclick="resetApp()" class="text-indigo-500 hover:text-indigo-700 text-sm font-medium">
+                            <i class="fas fa-redo-alt mr-1"></i> 다시 하기
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const apiKey = ""; // API Key is injected by the environment
+
+        async function analyzeSongs() {
+            // 입력값 가져오기
+            const songs = [
+                { artist: document.getElementById('artist1').value, title: document.getElementById('title1').value },
+                { artist: document.getElementById('artist2').value, title: document.getElementById('title2').value },
+                { artist: document.getElementById('artist3').value, title: document.getElementById('title3').value }
+            ];
+
+            // 유효성 검사
+            if (songs.some(s => !s.artist || !s.title)) {
+                alert("3곡의 가수와 제목을 모두 입력해주세요. 당신의 이야기를 더 정확히 듣고 싶어요.");
+                return;
+            }
+
+            // UI 전환 (로딩)
+            document.getElementById('inputSection').classList.add('hidden');
+            document.getElementById('loadingSection').classList.remove('hidden');
+            document.getElementById('loadingSection').classList.add('flex');
+
+            // 프롬프트 구성
+            const prompt = `
+            사용자가 올해 즐겨 들은 노래 리스트야. 
+            1. ${songs[0].artist} - ${songs[0].title}
+            2. ${songs[1].artist} - ${songs[1].title}
+            3. ${songs[2].artist} - ${songs[2].title}
+
+            이 노래들의 가사, 분위기, 장르를 분석해서 이 사람의 1년이 어땠을지 심리 상담사처럼 따뜻하고 서정적으로 분석해줘.
+            
+            다음 JSON 형식으로만 응답해줘. 다른 말은 하지 마.
+            {
+                "colorHex": "#색상코드",
+                "colorName": "색상이름 (예: 미드나잇 포레스트 그린)",
+                "keywords": ["#키워드1", "#키워드2", "#키워드3"],
+                "title": "한 줄 요약 제목 (서정적인 문구)",
+                "content": "300자 내외의 따뜻한 편지글 형식의 분석 내용 (존댓말, 해요체)"
+            }
+            `;
+
+            try {
+                // Gemini API 호출
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{ text: prompt }]
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (!data.candidates || data.candidates.length === 0) {
+                    throw new Error("AI가 응답하지 않았습니다.");
+                }
+
+                let resultText = data.candidates[0].content.parts[0].text;
+                
+                // JSON 파싱 (마크다운 코드블럭 제거)
+                resultText = resultText.replace(/```json/g, '').replace(/```/g, '').trim();
+                const resultJson = JSON.parse(resultText);
+
+                // 결과 표시
+                displayResult(resultJson);
+
+            } catch (error) {
+                console.error(error);
+                alert("분석 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                resetApp();
+            }
+        }
+
+        function displayResult(data) {
+            // 로딩 숨김, 결과 표시
+            document.getElementById('loadingSection').classList.add('hidden');
+            document.getElementById('loadingSection').classList.remove('flex');
+            document.getElementById('resultSection').classList.remove('hidden');
+
+            // 데이터 바인딩
+            const colorCard = document.getElementById('colorCard');
+            colorCard.style.backgroundColor = data.colorHex;
+            
+            document.getElementById('resultColorName').innerText = data.colorName;
+            document.getElementById('resultTitle').innerText = data.title;
+            document.getElementById('resultContent').innerText = data.content;
+
+            // 키워드 렌더링
+            const keywordsContainer = document.getElementById('resultKeywords');
+            keywordsContainer.innerHTML = '';
+            data.keywords.forEach(keyword => {
+                const span = document.createElement('span');
+                span.className = 'px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm font-medium';
+                span.innerText = keyword;
+                keywordsContainer.appendChild(span);
+            });
+        }
+
+        function resetApp() {
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('loadingSection').classList.add('hidden');
+            document.getElementById('loadingSection').classList.remove('flex');
+            document.getElementById('inputSection').classList.remove('hidden');
+            
+            // 입력창 초기화
+            document.querySelectorAll('input').forEach(input => input.value = '');
+        }
+    </script>
+</body>
+</html>
